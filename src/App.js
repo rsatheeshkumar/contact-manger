@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+import "./App.css";
+import AddContact from "./components/add-contact/AddContact";
+import ContactList from "./components/contact/ContactList";
+const App = () => {
+  const [contacts, setContacts] = useState([]);
+  const id = Math.floor(Math.random() * 99);
+  const LOCAL_STORAGE = "contacts";
 
-function App() {
+  const addContact = (contact) => {
+    setContacts([...contacts, { id, ...contact }]);
+  };
+  const deleteContact = (id) => {
+    const newContactList = contacts.filter((contact) => {
+      return contact.id !== id;
+    });
+    setContacts(newContactList);
+  };
+
+  useEffect(() => {
+    const retrieveContacts = JSON.parse(localStorage.getItem(LOCAL_STORAGE));
+    if (retrieveContacts) {
+      setContacts(retrieveContacts);
+    }
+  }, []);
+  useEffect(() => {
+    localStorage.setItem(LOCAL_STORAGE, JSON.stringify(contacts));
+  }, [contacts]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container-fluid align-items-center">
+      <AddContact addContact={addContact} />
+      <ContactList contacts={contacts} deleteContact={deleteContact} />
     </div>
   );
-}
+};
 
 export default App;
