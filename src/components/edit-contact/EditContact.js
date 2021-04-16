@@ -1,23 +1,23 @@
-import React, { Fragment, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
-const AddContact = ({ addContact, history }) => {
-  const [newContact, setNewContact] = useState({});
-
+const EditContact = ({ updateContact, history, location }) => {
+  const { id, name, email } = location.state.contact;
+  const [newContact, setNewContact] = useState({ id, name, email });
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setNewContact({ ...newContact, [name]: value });
+    setNewContact({ ...newContact, [name]: value, id });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addContact(newContact);
+    updateContact(newContact);
     history.push("/");
   };
   return (
     <>
       <div className="d-flex justify-content-around h-2 mt-4 mb-2">
-        <h1>Add Contact</h1>
+        <h1>Edit Contact</h1>
         <Link to="/" className="btn btn-danger p-1 h-25 align-item-center mt-2">
           Cancel
         </Link>
@@ -52,7 +52,7 @@ const AddContact = ({ addContact, history }) => {
                 className=" button mt-4 p-1 w-100   btn btn-sm btn-success"
                 type="submit"
               >
-                Add Contact
+                Update Contact
               </button>
             </div>
           </form>
@@ -62,6 +62,4 @@ const AddContact = ({ addContact, history }) => {
   );
 };
 
-export default AddContact;
-
-// value={newContact.name ?? ""}
+export default EditContact;
